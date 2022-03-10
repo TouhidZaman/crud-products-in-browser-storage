@@ -1,3 +1,5 @@
+const productsFiled =  document.getElementById('products-filed');
+
 //To Load initial products from Local storage
 const loadProducts = () => {
     const products = getProducts();
@@ -41,19 +43,26 @@ const getProducts = () => {
     return products;
 }
 
+//To delete a single product
+const deleteProduct = productId => {
+    const producs = getProducts();
+    const updatedProducts = producs.filter(produc => produc.id !== productId);
+    localStorage.setItem('products', JSON.stringify(updatedProducts));
+    const item = document.getElementById(+productId); //getting deleted product from UI
+    productsFiled.removeChild(item); //removing product from UI
+}
+
 //Display Products
 const displayProduct = (product) => {
-    const productsFiled =  document.getElementById('products-filed');
     const tr = document.createElement('tr');
     tr.innerHTML = `
-        <tr id="${product.id}">
             <td scope="row" colspan="2">${product.name}</td>
             <td>${product.price}</td>
             <td>
-                <button onclick="deleteProduct('${product.id}')" class="delete-btn btn fs-3 p-0 text-danger"><i class="bi bi-x"></i></button>
+                <button onclick="deleteProduct(${product.id})" class="delete-btn btn fs-3 p-0 text-danger"><i class="bi bi-x"></i></button>
             </td>
-        </tr>
     `;
+    tr.setAttribute('id', product.id);
     productsFiled.appendChild(tr);
 }
 
